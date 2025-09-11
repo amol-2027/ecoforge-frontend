@@ -2337,10 +2337,10 @@ const LearningModules = () => {
 
           {/* Navigation Tabs */}
           <div className="flex justify-center">
-            <div className="flex gap-2 bg-card/50 p-2 rounded-2xl backdrop-blur-sm">
+            <div className="flex gap-2 bg-card/50 p-2 rounded-2xl backdrop-blur-sm max-w-full overflow-x-auto whitespace-nowrap">
               <Button
                 variant={activeTab === "modules" ? "default" : "ghost"}
-                className={`flex items-center gap-2 rounded-xl transition-all duration-200 ${
+                className={`flex items-center gap-2 rounded-xl transition-all duration-200 shrink-0 text-sm px-3 py-1 sm:px-4 sm:py-2 ${
                   activeTab === "modules"
                     ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg"
                     : "hover:bg-teal-50 hover:text-teal-600 hover:shadow-sm"
@@ -2352,7 +2352,7 @@ const LearningModules = () => {
               </Button>
               <Button
                 variant={activeTab === "quizzes" ? "default" : "ghost"}
-                className={`flex items-center gap-2 rounded-xl transition-all duration-200 ${
+                className={`flex items-center gap-2 rounded-xl transition-all duration-200 shrink-0 text-sm px-3 py-1 sm:px-4 sm:py-2 ${
                   activeTab === "quizzes"
                     ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg"
                     : "hover:bg-teal-50 hover:text-teal-600 hover:shadow-sm"
@@ -2364,7 +2364,7 @@ const LearningModules = () => {
               </Button>
               <Button
                 variant={activeTab === "missions" ? "default" : "ghost"}
-                className={`flex items-center gap-2 rounded-xl transition-all duration-200 ${
+                className={`flex items-center gap-2 rounded-xl transition-all duration-200 shrink-0 text-sm px-3 py-1 sm:px-4 sm:py-2 ${
                   activeTab === "missions"
                     ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg"
                     : "hover:bg-teal-50 hover:text-teal-600 hover:shadow-sm"
@@ -2376,7 +2376,7 @@ const LearningModules = () => {
               </Button>
               <Button
                 variant={activeTab === "stories" ? "default" : "ghost"}
-                className={`flex items-center gap-2 rounded-xl transition-all duration-200 ${
+                className={`flex items-center gap-2 rounded-xl transition-all duration-200 shrink-0 text-sm px-3 py-1 sm:px-4 sm:py-2 ${
                   activeTab === "stories"
                     ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg"
                     : "hover:bg-teal-50 hover:text-teal-600 hover:shadow-sm"
@@ -2388,7 +2388,7 @@ const LearningModules = () => {
               </Button>
               <Button
                 variant={activeTab === "sustainpath" ? "default" : "ghost"}
-                className={`flex items-center gap-2 rounded-xl transition-all duration-200 ${
+                className={`flex items-center gap-2 rounded-xl transition-all duration-200 shrink-0 text-sm px-3 py-1 sm:px-4 sm:py-2 ${
                   activeTab === "sustainpath"
                     ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg"
                     : "hover:bg-teal-50 hover:text-teal-600 hover:shadow-sm"
@@ -2400,7 +2400,7 @@ const LearningModules = () => {
               </Button>
               <Button
                 variant={activeTab === "battles" ? "default" : "ghost"}
-                className={`flex items-center gap-2 rounded-xl transition-all duration-200 ${
+                className={`flex items-center gap-2 rounded-xl transition-all duration-200 shrink-0 text-sm px-3 py-1 sm:px-4 sm:py-2 ${
                   activeTab === "battles"
                     ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg"
                     : "hover:bg-teal-50 hover:text-teal-600 hover:shadow-sm"

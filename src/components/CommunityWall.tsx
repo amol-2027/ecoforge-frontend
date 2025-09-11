@@ -135,93 +135,151 @@ const CommunityWall = () => {
     },
   ];
 
-  const API_BASE_URL = "https://ecoforge-backend-ruby.vercel.app/api";
+  // Dummy mode: local sample posts (inspired by backend/seedData.js)
+  const SAMPLE_POSTS: Post[] = [
+    {
+      _id: "1",
+      title: "Tree Planting Drive at Central Park",
+      description:
+        "Organized a community tree planting event where we planted 25 native saplings including neem, mango, and gulmohar trees. Over 50 students participated and we're planning to make this a monthly event.",
+      category: "tree-planting",
+      author: "EcoWarrior Rahul",
+      image: {
+        filename: "tree-planting-1.jpg",
+        path: "/images/1.webp",
+        mimetype: "image/jpeg",
+        size: 1024000,
+      },
+      imageUrl: "/backend/images/1.webp",
+      likes: 45,
+      comments: [
+        {
+          _id: "c1",
+          author: "GreenThumb Priya",
+          text: "Amazing initiative! I'll join next month's drive.",
+          createdAt: new Date(
+            Date.now() - 2 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+        },
+      ],
+      status: "approved",
+      ecoPoints: 50,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      _id: "2",
+      title: "Plastic Waste Collection Challenge",
+      description:
+        "Completed a week-long plastic waste collection challenge in my neighborhood. Collected 8kg of plastic and took everything to the local recycling center.",
+      category: "recycling",
+      author: "RecycleHero Ananya",
+      image: {
+        filename: "recycling-1.jpg",
+        path: "/images/2.jpg",
+        mimetype: "image/jpeg",
+        size: 980000,
+      },
+      imageUrl: "/backend/images/2.jpg",
+      likes: 32,
+      comments: [
+        {
+          _id: "c2",
+          author: "CleanEarth Kiran",
+          text: "Inspiring! I'm starting my own collection drive.",
+          createdAt: new Date(
+            Date.now() - 3 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+        },
+      ],
+      status: "approved",
+      ecoPoints: 30,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      _id: "3",
+      title: "LED Bulb Replacement Project",
+      description:
+        "Replaced 12 incandescent bulbs with LED bulbs at home. Saving ~60% electricity and reducing our carbon footprint.",
+      category: "energy-saving",
+      author: "EnergySaver Meera",
+      image: {
+        filename: "energy-saving-1.jpg",
+        path: "/images/3.webp",
+        mimetype: "image/jpeg",
+        size: 1150000,
+      },
+      imageUrl: "/backend/images/3.webp",
+      likes: 28,
+      comments: [
+        {
+          _id: "c3",
+          author: "PowerConscious Raj",
+          text: "Smart move! I'm doing the same at home.",
+          createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+        },
+      ],
+      status: "approved",
+      ecoPoints: 40,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+  ];
 
-  const fetchPosts = async (page = 1, category = "all", sort = "createdAt") => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: "10",
-        sortBy: sort,
-        sortOrder: "desc",
-      });
-
-      if (category !== "all") {
-        params.append("category", category);
-      }
-
-      const response = await fetch(`${API_BASE_URL}/posts?${params}`);
-      const data = await response.json();
-
-      if (data.success) {
-        console.log("Fetched posts:", data.data);
-        setPosts(data.data);
-        setPagination(data.pagination);
-      } else {
-        setError(data.error || "Failed to fetch posts");
-      }
-    } catch (err) {
-      setError("Failed to connect to server");
-      console.error("Error fetching posts:", err);
-    } finally {
-      setLoading(false);
+  const fetchPosts = async (
+    page = 1,
+    category = "all",
+    sort: "createdAt" | "likes" = "createdAt"
+  ) => {
+    setLoading(true);
+    // Simple filter/sort/paginate locally
+    let data = [...SAMPLE_POSTS];
+    if (category !== "all") {
+      data = data.filter((p) => p.category === (category as any));
     }
+    data.sort((a, b) =>
+      sort === "likes"
+        ? b.likes - a.likes
+        : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    const pageSize = 10;
+    const start = (page - 1) * pageSize;
+    const slice = data.slice(start, start + pageSize);
+    setPosts(slice);
+    setPagination({
+      currentPage: page,
+      totalPages: Math.max(1, Math.ceil(data.length / pageSize)),
+      totalPosts: data.length,
+      hasNextPage: start + pageSize < data.length,
+      hasPrevPage: page > 1,
+    });
+    setError(null);
+    setLoading(false);
   };
 
   const handleLike = async (postId: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/posts/${postId}/like`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: "anonymous-user" }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setPosts(
-          posts.map((post) =>
-            post._id === postId ? { ...post, likes: data.data.likes } : post
-          )
-        );
-      }
-    } catch (err) {
-      console.error("Error liking post:", err);
-    }
+    setPosts((prev) =>
+      prev.map((p) => (p._id === postId ? { ...p, likes: p.likes + 1 } : p))
+    );
   };
 
   const handleAddComment = async (postId: string) => {
     const commentText = newComment[postId];
     if (!commentText?.trim()) return;
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/posts/${postId}/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: commentText,
-          author: "Anonymous User",
-        }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setPosts(
-          posts.map((post) =>
-            post._id === postId
-              ? { ...post, comments: [...post.comments, data.data] }
-              : post
-          )
-        );
-        setNewComment({ ...newComment, [postId]: "" });
-      }
-    } catch (err) {
-      console.error("Error adding comment:", err);
-    }
+    const newEntry: Comment = {
+      _id: Math.random().toString(36).slice(2),
+      author: "Anonymous User",
+      text: commentText,
+      createdAt: new Date().toISOString(),
+    };
+    setPosts((prev) =>
+      prev.map((p) =>
+        p._id === postId ? { ...p, comments: [...p.comments, newEntry] } : p
+      )
+    );
+    setNewComment({ ...newComment, [postId]: "" });
   };
 
   const handleCreatePost = async (e: React.FormEvent) => {
@@ -235,50 +293,43 @@ const CommunityWall = () => {
     formData.append("author", newPost.author || "Anonymous");
     formData.append("image", newPost.image);
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/posts`, {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setShowNewPostForm(false);
-        setNewPost({
-          title: "",
-          description: "",
-          category: "other",
-          author: "",
-          image: null,
-        });
-        fetchPosts(currentPage, selectedCategory, sortBy);
-      } else {
-        setError(data.error || "Failed to create post");
-      }
-    } catch (err) {
-      setError("Failed to create post");
-      console.error("Error creating post:", err);
-    }
+    // Create a local object URL for preview
+    const imageFile = newPost.image;
+    const imgUrl = imageFile ? URL.createObjectURL(imageFile) : undefined;
+    const created: Post = {
+      _id: Math.random().toString(36).slice(2),
+      title: newPost.title,
+      description: newPost.description,
+      category: newPost.category,
+      author: newPost.author || "Anonymous",
+      image: {
+        filename: imageFile?.name || "upload",
+        path: "",
+        mimetype: imageFile?.type || "image/*",
+        size: imageFile?.size || 0,
+      },
+      imageUrl: imgUrl,
+      likes: 0,
+      comments: [],
+      status: "approved",
+      ecoPoints: 20,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setPosts((prev) => [created, ...prev]);
+    setShowNewPostForm(false);
+    setNewPost({
+      title: "",
+      description: "",
+      category: "other",
+      author: "",
+      image: null,
+    });
   };
 
   const handleDeletePost = async (postId: string) => {
     if (!confirm("Are you sure you want to delete this post?")) return;
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
-        method: "DELETE",
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setPosts(posts.filter((post) => post._id !== postId));
-      } else {
-        setError(data.error || "Failed to delete post");
-      }
-    } catch (err) {
-      setError("Failed to delete post");
-      console.error("Error deleting post:", err);
-    }
+    setPosts((prev) => prev.filter((p) => p._id !== postId));
   };
 
   const toggleComments = (postId: string) => {

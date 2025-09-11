@@ -426,11 +426,14 @@ const Index = () => {
         <div className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] rounded-full bg-gradient-to-br from-emerald-200 via-green-100 to-transparent opacity-60 blur-2xl animate-pulse-slow" />
         <div className="absolute bottom-[-100px] right-[-100px] w-[350px] h-[350px] rounded-full bg-gradient-to-tr from-blue-200 via-cyan-100 to-transparent opacity-50 blur-2xl animate-pulse-slower" />
         <div className="absolute top-[40%] left-[-80px] w-[200px] h-[200px] rounded-full bg-gradient-to-br from-yellow-100 via-green-50 to-transparent opacity-40 blur-2xl animate-pulse-slowest" />
+        {/* Extra wow layer: subtle radial + conic glow */}
+        <div className="absolute -top-16 right-[-60px] h-[420px] w-[420px] rounded-full opacity-40 blur-3xl bg-[conic-gradient(at_top_right,theme(colors.emerald.200)_0%,theme(colors.cyan.200)_30%,transparent_70%)]" />
+        <div className="absolute inset-0 opacity-[0.10] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.25),transparent_60%)]" />
       </div>
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <header className="border-b border-border bg-gradient-to-r from-emerald-50/70 via-white/60 to-cyan-50/70 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             {/* Hamburger for mobile */}
             <button
               className="md:hidden mr-2 p-2 rounded-full hover:bg-muted/50 focus:outline-none"
@@ -439,20 +442,24 @@ const Index = () => {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <div className="h-10 w-10 rounded-full bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center">
-              <Leaf className="h-6 w-6 text-primary-foreground" />
+            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center flex-shrink-0">
+              <Leaf className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-gradient-eco">EcoQuest</h1>
-              <p className="text-xs text-muted-foreground">
+            <div className="truncate">
+              <h1 className="text-lg sm:text-xl font-bold text-gradient-eco leading-tight">
+                EcoQuest
+              </h1>
+              <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">
                 Play, Learn, Save the Planet
               </p>
             </div>
           </div>
           {/* ...points, coins, profile button... */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <div className="badge-eco">{ecoPoints} Points</div>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <div className="badge-eco text-[10px] sm:text-xs px-2 py-1">
+                {ecoPoints} <span className="hidden xs:inline">Points</span>
+              </div>
               <Button
                 variant="ghost"
                 size="sm"
@@ -464,11 +471,11 @@ const Index = () => {
               </Button>
             </div>
             <div
-              className="badge-water flex items-center gap-1 cursor-pointer hover:scale-105 transition-transform"
+              className="badge-water flex items-center gap-1 cursor-pointer hover:scale-105 transition-transform text-[10px] sm:text-xs px-2 py-1"
               onClick={() => setActiveTab("wallet")}
             >
               <Coins className="h-3 w-3" />
-              {ecoCoins} GreenCoins
+              {ecoCoins} <span className="hidden sm:inline">GreenCoins</span>
             </div>
             <Button
               variant="ghost"
@@ -477,7 +484,9 @@ const Index = () => {
               className="flex items-center gap-2 hover:bg-muted/50 rounded-full p-2"
             >
               <User className="h-4 w-4" />
-              <span className="text-sm font-medium">Profile</span>
+              <span className="hidden sm:inline text-sm font-medium">
+                Profile
+              </span>
             </Button>
           </div>
         </div>
@@ -579,7 +588,11 @@ const Index = () => {
         </div>
       </div>
       {/* Content */}
-      <div className="container mx-auto px-4 py-6">{renderContent()}</div>
+      <div className="container mx-auto px-4 py-6">
+        <div className="rounded-2xl border border-white/50 bg-white/60 backdrop-blur-md shadow-[0_10px_35px_-10px_rgba(0,0,0,0.25)] p-3 sm:p-5">
+          {renderContent()}
+        </div>
+      </div>
       {/* Profile Dialog (unchanged) */}
       <Dialog open={showProfile} onOpenChange={setShowProfile}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
