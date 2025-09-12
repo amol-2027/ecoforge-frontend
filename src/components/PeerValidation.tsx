@@ -187,13 +187,13 @@ const PeerValidation = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex justify-center">
-        <div className="flex gap-2 bg-card/50 p-2 rounded-2xl backdrop-blur-sm">
+      <div className="flex justify-center px-2 sm:px-0">
+        <div className="flex gap-2 bg-card/50 p-2 rounded-2xl backdrop-blur-sm max-w-full overflow-x-auto whitespace-nowrap">
           {tabs.map((tab) => (
             <Button
               key={tab.id}
               variant={activeTab === tab.id ? "default" : "ghost"}
-              className={`flex items-center gap-2 rounded-xl transition-all duration-200 ${
+              className={`flex items-center gap-2 rounded-xl transition-all duration-200 shrink-0 text-sm px-3 py-1 sm:px-4 sm:py-2 ${
                 activeTab === tab.id
                   ? "bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg"
                   : "hover:bg-cyan-50 hover:text-cyan-600 hover:shadow-sm text-cyan-700"

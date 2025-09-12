@@ -176,46 +176,49 @@ const EcoActivityHeatmap = () => {
 
   return (
     <Card className="card-eco">
-      <div className="p-6 space-y-6">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center">
-              <Calendar className="h-5 w-5 text-primary-foreground" />
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center flex-shrink-0">
+              <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
             </div>
-            <div>
-              <h3 className="text-xl font-bold text-gradient-eco">
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg sm:text-xl font-bold text-gradient-eco">
                 Eco Activity Heatmap
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Your environmental impact over the last 6 months
               </p>
             </div>
           </div>
-          <Badge variant="secondary" className="bg-primary/10 text-primary">
+          <Badge
+            variant="secondary"
+            className="bg-primary/10 text-primary text-xs sm:text-sm w-full sm:w-auto text-center"
+          >
             {totalActivities} activities
           </Badge>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="text-center p-3 rounded-xl bg-muted/30">
-            <div className="text-2xl font-bold text-gradient-eco">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          <div className="text-center p-2 sm:p-3 rounded-lg sm:rounded-xl bg-muted/30">
+            <div className="text-lg sm:text-2xl font-bold text-gradient-eco">
               {totalActivities}
             </div>
             <div className="text-xs text-muted-foreground">
               Total Activities
             </div>
           </div>
-          <div className="text-center p-3 rounded-xl bg-muted/30">
-            <div className="text-2xl font-bold text-gradient-water flex items-center justify-center gap-1">
-              <Flame className="h-5 w-5" />
+          <div className="text-center p-2 sm:p-3 rounded-lg sm:rounded-xl bg-muted/30">
+            <div className="text-lg sm:text-2xl font-bold text-gradient-water flex items-center justify-center gap-1">
+              <Flame className="h-4 w-4 sm:h-5 sm:w-5" />
               {currentStreak}
             </div>
             <div className="text-xs text-muted-foreground">Current Streak</div>
           </div>
-          <div className="text-center p-3 rounded-xl bg-muted/30">
-            <div className="text-2xl font-bold text-gradient-accent">
+          <div className="text-center p-2 sm:p-3 rounded-lg sm:rounded-xl bg-muted/30">
+            <div className="text-lg sm:text-2xl font-bold text-gradient-accent">
               {longestStreak}
             </div>
             <div className="text-xs text-muted-foreground">Longest Streak</div>
@@ -223,8 +226,8 @@ const EcoActivityHeatmap = () => {
         </div>
 
         {/* Heatmap */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="text-sm font-medium">
               Last 6 months of eco activities
             </div>
@@ -234,7 +237,9 @@ const EcoActivityHeatmap = () => {
                 {[0, 1, 2, 3, 4].map((level) => (
                   <div
                     key={level}
-                    className={`h-3 w-3 rounded-sm ${getLevelColor(level)}`}
+                    className={`h-2 w-2 sm:h-3 sm:w-3 rounded-sm ${getLevelColor(
+                      level
+                    )}`}
                   />
                 ))}
               </div>
@@ -242,17 +247,19 @@ const EcoActivityHeatmap = () => {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <div className="flex gap-1 min-w-max">
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="flex gap-1 min-w-max pb-2">
               {/* Weekday labels */}
-              <div className="flex flex-col gap-1 mr-2">
+              <div className="flex flex-col gap-1 mr-2 flex-shrink-0">
                 {weekdayLabels.map((day, index) => (
                   <div
                     key={day}
-                    className="h-3 w-3 flex items-center justify-center text-xs text-muted-foreground"
-                    style={{ height: "12px" }}
+                    className="h-2 w-2 sm:h-3 sm:w-3 flex items-center justify-center text-xs text-muted-foreground"
+                    style={{ height: "10px" }}
                   >
-                    {index % 2 === 1 ? day : ""}
+                    <span className="text-[10px] sm:text-xs">
+                      {index % 2 === 1 ? day : ""}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -266,7 +273,7 @@ const EcoActivityHeatmap = () => {
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <div
-                              className={`h-3 w-3 rounded-sm cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all ${getLevelColor(
+                              className={`h-2 w-2 sm:h-3 sm:w-3 rounded-sm cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all ${getLevelColor(
                                 day.level
                               )}`}
                             />
@@ -314,28 +321,32 @@ const EcoActivityHeatmap = () => {
           </div>
 
           {/* Month labels */}
-          <div className="flex gap-1 ml-8">
-            {monthLabels.map((month, index) => (
-              <div
-                key={month}
-                className="text-xs text-muted-foreground"
-                style={{ width: `${(weeks.length / 6) * (index + 1) * 12}px` }}
-              >
-                {month}
-              </div>
-            ))}
+          <div className="overflow-x-auto scrollbar-hide">
+            <div className="flex gap-1 ml-8 min-w-max pb-1">
+              {monthLabels.map((month, index) => (
+                <div
+                  key={month}
+                  className="text-xs text-muted-foreground flex-shrink-0"
+                  style={{
+                    width: `${(weeks.length / 6) * (index + 1) * 12}px`,
+                  }}
+                >
+                  {month}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Motivational message */}
-        <div className="text-center p-4 rounded-xl bg-gradient-to-r from-primary/5 to-primary-glow/10 border border-primary/20">
+        <div className="text-center p-3 sm:p-4 rounded-lg sm:rounded-xl bg-gradient-to-r from-primary/5 to-primary-glow/10 border border-primary/20">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <Leaf className="h-5 w-5 text-primary" />
-            <span className="font-semibold text-gradient-eco">
+            <Leaf className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <span className="font-semibold text-gradient-eco text-sm sm:text-base">
               Keep up the great work!
             </span>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground px-2 sm:px-0">
             {currentStreak > 0
               ? `You're on a ${currentStreak}-day streak! Every action counts towards a greener future.`
               : "Start your eco-journey today! Small actions lead to big changes."}

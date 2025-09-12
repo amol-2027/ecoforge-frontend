@@ -404,24 +404,25 @@ const CommunityWall = () => {
       </div>
 
       {/* Controls */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="relative">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2">
+          <div className="relative flex-1 sm:flex-none">
             <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search posts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-64"
+              className="pl-10 w-full sm:w-64"
             />
           </div>
           <Button
             variant="outline"
             onClick={() => setShowNewPostForm(true)}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 justify-center sm:justify-start"
           >
             <Plus className="h-4 w-4" />
-            New Post
+            <span className="hidden xs:inline">New Post</span>
+            <span className="xs:hidden">New</span>
           </Button>
         </div>
 
@@ -429,7 +430,7 @@ const CommunityWall = () => {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as "createdAt" | "likes")}
-            className="px-3 py-2 border rounded-md bg-background"
+            className="px-3 py-2 border rounded-md bg-background text-sm w-full sm:w-auto"
           >
             <option value="createdAt">Latest</option>
             <option value="likes">Most Liked</option>
@@ -438,7 +439,7 @@ const CommunityWall = () => {
       </div>
 
       {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 justify-center">
+      <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
         {categories.map((category) => {
           const Icon = category.icon;
           return (
@@ -450,10 +451,16 @@ const CommunityWall = () => {
                 setSelectedCategory(category.id);
                 setCurrentPage(1);
               }}
-              className="flex items-center gap-2"
+              className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
             >
-              <Icon className="h-4 w-4" />
-              {category.label}
+              <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline">{category.label}</span>
+              <span className="xs:hidden">
+                {category.label
+                  .split(" ")
+                  .map((word) => word[0])
+                  .join("")}
+              </span>
             </Button>
           );
         })}
@@ -553,7 +560,7 @@ const CommunityWall = () => {
       )}
 
       {/* Posts */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {filteredPosts.map((post) => {
           const categoryInfo = getCategoryInfo(post.category);
           const Icon = categoryInfo.icon;
@@ -664,32 +671,36 @@ const CommunityWall = () => {
 
                 {/* Post Actions */}
                 <div className="flex items-center justify-between pt-4 border-t border-border">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 sm:gap-4 flex-1">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleLike(post._id)}
-                      className="flex items-center gap-2 hover:text-red-500"
+                      className="flex items-center gap-1 sm:gap-2 hover:text-red-500 px-2 sm:px-3 py-2 text-xs sm:text-sm flex-1 sm:flex-none justify-center"
                     >
-                      <Heart className="h-4 w-4" />
-                      {post.likes}
+                      <Heart className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="hidden xs:inline">{post.likes}</span>
+                      <span className="xs:hidden">{post.likes}</span>
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => toggleComments(post._id)}
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 text-xs sm:text-sm flex-1 sm:flex-none justify-center"
                     >
-                      <MessageCircle className="h-4 w-4" />
-                      {post.comments.length}
+                      <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="hidden xs:inline">
+                        {post.comments.length}
+                      </span>
+                      <span className="xs:hidden">{post.comments.length}</span>
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 text-xs sm:text-sm flex-1 sm:flex-none justify-center"
                     >
-                      <Share2 className="h-4 w-4" />
-                      Share
+                      <Share2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="hidden sm:inline">Share</span>
                     </Button>
                   </div>
                 </div>

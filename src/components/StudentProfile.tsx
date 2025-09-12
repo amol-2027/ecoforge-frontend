@@ -377,9 +377,6 @@ const StudentProfile = () => {
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gradient-eco mb-2">
-          Student Profile
-        </h2>
         <p className="text-muted-foreground">
           Your personal information and eco-achievements
         </p>
@@ -387,84 +384,110 @@ const StudentProfile = () => {
 
       {/* Profile Header */}
       <Card className="card-eco">
-        <div className="flex flex-col md:flex-row items-center gap-6 p-6">
-          <div className="text-center md:text-left">
-            <Avatar className="h-24 w-24 mx-auto md:mx-0 mb-4 ring-4 ring-primary/20">
+        <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6 p-4 sm:p-6">
+          <div className="text-center lg:text-left w-full lg:w-auto">
+            <Avatar className="h-20 w-20 sm:h-24 sm:w-24 mx-auto lg:mx-0 mb-3 sm:mb-4 ring-4 ring-primary/20">
               <AvatarImage src={studentInfo.avatar} />
-              <AvatarFallback className="text-2xl font-bold">
+              <AvatarFallback className="text-xl sm:text-2xl font-bold">
                 {studentInfo.name
                   .split(" ")
                   .map((n) => n[0])
                   .join("")}
               </AvatarFallback>
             </Avatar>
-            <h3 className="text-2xl font-bold text-gradient-eco mb-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-gradient-eco mb-2">
               {studentInfo.name}
             </h3>
-            <p className="text-muted-foreground mb-3">
+            <p className="text-sm sm:text-base text-muted-foreground mb-3 px-2 sm:px-0">
               {studentInfo.grade} • {studentInfo.school}
             </p>
             {/* Followers/Following Stats */}
-            <div className="flex items-center gap-4 mb-3">
+            <div className="flex items-center justify-center lg:justify-start gap-4 sm:gap-6 mb-3">
               <div
                 className="flex items-center gap-1 cursor-pointer hover:text-primary transition-colors"
                 onClick={() => setShowFollowersModal(true)}
               >
-                <span className="font-semibold">{followers}</span>
-                <span className="text-sm text-muted-foreground">followers</span>
+                <span className="font-semibold text-sm sm:text-base">
+                  {followers}
+                </span>
+                <span className="text-xs sm:text-sm text-muted-foreground">
+                  followers
+                </span>
               </div>
               <div
                 className="flex items-center gap-1 cursor-pointer hover:text-primary transition-colors"
                 onClick={() => setShowFollowingModal(true)}
               >
-                <span className="font-semibold">{following}</span>
-                <span className="text-sm text-muted-foreground">following</span>
+                <span className="font-semibold text-sm sm:text-base">
+                  {following}
+                </span>
+                <span className="text-xs sm:text-sm text-muted-foreground">
+                  following
+                </span>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-              <Badge variant="secondary" className="bg-primary/10 text-primary">
+            <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+              <Badge
+                variant="secondary"
+                className="bg-primary/10 text-primary text-xs sm:text-sm"
+              >
                 Rank #{studentInfo.rank}
               </Badge>
-              <Badge variant="secondary" className="bg-warning/10 text-warning">
+              <Badge
+                variant="secondary"
+                className="bg-warning/10 text-warning text-xs sm:text-sm"
+              >
                 {studentInfo.streak} day streak
               </Badge>
             </div>
           </div>
 
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="w-full lg:flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <div className="text-center">
-              <div className="h-16 w-16 rounded-full bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center mx-auto mb-2">
-                <Star className="h-8 w-8 text-primary-foreground" />
+              <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center mx-auto mb-2">
+                <Star className="h-6 w-6 sm:h-8 sm:w-8 text-primary-foreground" />
               </div>
-              <div className="text-2xl font-bold text-gradient-eco">
+              <div className="text-lg sm:text-2xl font-bold text-gradient-eco">
                 {studentInfo.ecoPoints}
               </div>
-              <div className="text-sm text-muted-foreground">Eco Points</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">
+                Eco Points
+              </div>
             </div>
 
             <div className="text-center">
-              <div className="h-16 w-16 rounded-full bg-gradient-to-r from-warning to-warning-glow flex items-center justify-center mx-auto mb-2">
-                <DollarSign className="h-8 w-8 text-warning" />
+              <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-gradient-to-r from-warning to-warning-glow flex items-center justify-center mx-auto mb-2">
+                <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-warning" />
               </div>
-              <div className="text-2xl font-bold text-gradient-water">
+              <div className="text-lg sm:text-2xl font-bold text-gradient-water">
                 {studentInfo.ecoCoins}
               </div>
-              <div className="text-sm text-muted-foreground">GreenCoins</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">
+                GreenCoins
+              </div>
             </div>
 
             <div className="text-center">
-              <div className="h-16 w-16 rounded-full bg-gradient-to-r from-accent to-accent-glow flex items-center justify-center mx-auto mb-2">
-                <Flame className="h-8 w-8 text-accent" />
+              <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-gradient-to-r from-accent to-accent-glow flex items-center justify-center mx-auto mb-2">
+                <Flame className="h-6 w-6 sm:h-8 sm:w-8 text-accent" />
               </div>
-              <div className="text-2xl font-bold text-gradient-accent">
+              <div className="text-lg sm:text-2xl font-bold text-gradient-accent">
                 {studentInfo.streak}
               </div>
-              <div className="text-sm text-muted-foreground">Day Streak</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">
+                Day Streak
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex justify-end mt-4">
-          <Button onClick={logout} variant="outline" size="sm" title="Logout">
+        <div className="flex justify-center lg:justify-end mt-4 px-4 sm:px-6">
+          <Button
+            onClick={logout}
+            variant="outline"
+            size="sm"
+            title="Logout"
+            className="w-full sm:w-auto"
+          >
             <LogOut className="h-4 w-4 mr-1" /> Logout
           </Button>
         </div>
@@ -472,30 +495,30 @@ const StudentProfile = () => {
 
       {/* Donation & Reuse */}
       <Card className="card-eco bg-gradient-to-br from-cyan-50 to-sky-50">
-        <div className="p-6 space-y-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-2xl bg-gradient-to-r from-cyan-500 to-sky-500 flex items-center justify-center shadow-eco">
-                <Gift className="h-6 w-6 text-white" />
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-gradient-to-r from-cyan-500 to-sky-500 flex items-center justify-center shadow-eco flex-shrink-0">
+                <Gift className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-cyan-700">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg sm:text-xl font-bold text-cyan-700">
                   Donation & Reuse
                 </h3>
-                <p className="text-sm text-cyan-700/70">
+                <p className="text-xs sm:text-sm text-cyan-700/70">
                   Give items a second life. Help people, reduce waste.
                 </p>
               </div>
             </div>
-            <Badge className="bg-cyan-100 text-cyan-700">
+            <Badge className="bg-cyan-100 text-cyan-700 text-xs sm:text-sm w-full sm:w-auto text-center">
               NGO partners: {ngoPartners.length}
             </Badge>
           </div>
 
           {/* Pledge Form */}
-          <div className="rounded-xl border border-cyan-200 bg-white/70 p-4">
-            <div className="grid md:grid-cols-5 gap-3">
-              <div className="md:col-span-2">
+          <div className="rounded-xl border border-cyan-200 bg-white/70 p-3 sm:p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              <div className="sm:col-span-2 lg:col-span-2">
                 <Label className="text-sm text-cyan-800">Category</Label>
                 <Select
                   value={pledge.category}
