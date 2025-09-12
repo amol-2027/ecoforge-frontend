@@ -529,8 +529,8 @@ const GreenCoinsWallet = () => {
           </Card>
 
           {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-2">
-            <div className="flex gap-2 bg-card/50 p-2 rounded-2xl backdrop-blur-sm">
+          <div className="flex justify-center px-2 sm:px-0">
+            <div className="flex gap-2 bg-card/50 p-2 rounded-2xl backdrop-blur-sm max-w-full overflow-x-auto whitespace-nowrap">
               {[
                 { id: "all" as const, label: "All Items", icon: Store },
                 { id: "badge" as const, label: "Badges", icon: Trophy },
@@ -545,7 +545,7 @@ const GreenCoinsWallet = () => {
                 <Button
                   key={category.id}
                   variant={activeCategory === category.id ? "default" : "ghost"}
-                  className={`flex items-center gap-2 rounded-xl transition-all duration-200 ${
+                  className={`flex items-center gap-2 rounded-xl transition-all duration-200 shrink-0 text-sm px-3 py-1 sm:px-4 sm:py-2 ${
                     activeCategory === category.id
                       ? "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-eco"
                       : "hover:bg-primary/10 hover:text-primary hover:shadow-sm"
@@ -729,3 +729,4 @@ const GreenCoinsWallet = () => {
 };
 
 export default GreenCoinsWallet;
+
