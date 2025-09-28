@@ -358,3 +358,4 @@ const EcoActivityHeatmap = () => {
 };
 
 export default EcoActivityHeatmap;
+
