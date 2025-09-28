@@ -404,33 +404,34 @@ const CommunityWall = () => {
       </div>
 
       {/* Controls */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-between">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2">
-          <div className="relative flex-1 sm:flex-none">
+      <div className="flex flex-col gap-3 sm:gap-4">
+        {/* Search and New Post Row */}
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch sm:items-center">
+          <div className="relative flex-1">
             <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search posts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-full sm:w-64"
+              className="pl-10 w-full"
             />
           </div>
           <Button
             variant="outline"
             onClick={() => setShowNewPostForm(true)}
-            className="flex items-center gap-2 justify-center sm:justify-start"
+            className="flex items-center gap-2 justify-center min-w-fit"
           >
             <Plus className="h-4 w-4" />
-            <span className="hidden xs:inline">New Post</span>
-            <span className="xs:hidden">New</span>
+            <span>New Post</span>
           </Button>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Sort and Filter Row */}
+        <div className="flex items-center gap-2 justify-center sm:justify-end">
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as "createdAt" | "likes")}
-            className="px-3 py-2 border rounded-md bg-background text-sm w-full sm:w-auto"
+            className="px-3 py-2 border rounded-md bg-background text-sm min-w-fit"
           >
             <option value="createdAt">Latest</option>
             <option value="likes">Most Liked</option>
@@ -451,16 +452,10 @@ const CommunityWall = () => {
                 setSelectedCategory(category.id);
                 setCurrentPage(1);
               }}
-              className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
+              className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 min-w-fit"
             >
-              <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden xs:inline">{category.label}</span>
-              <span className="xs:hidden">
-                {category.label
-                  .split(" ")
-                  .map((word) => word[0])
-                  .join("")}
-              </span>
+              <Icon className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+              <span className="whitespace-nowrap">{category.label}</span>
             </Button>
           );
         })}
@@ -671,7 +666,7 @@ const CommunityWall = () => {
 
                 {/* Post Actions */}
                 <div className="flex items-center justify-between pt-4 border-t border-border">
-                  <div className="flex items-center gap-2 sm:gap-4 flex-1">
+                  <div className="flex items-center gap-1 sm:gap-4 flex-1">
                     <Button
                       variant="ghost"
                       size="sm"
@@ -679,8 +674,7 @@ const CommunityWall = () => {
                       className="flex items-center gap-1 sm:gap-2 hover:text-red-500 px-2 sm:px-3 py-2 text-xs sm:text-sm flex-1 sm:flex-none justify-center"
                     >
                       <Heart className="h-3 w-3 sm:h-4 sm:w-4" />
-                      <span className="hidden xs:inline">{post.likes}</span>
-                      <span className="xs:hidden">{post.likes}</span>
+                      <span>{post.likes}</span>
                     </Button>
                     <Button
                       variant="ghost"
@@ -689,10 +683,7 @@ const CommunityWall = () => {
                       className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 text-xs sm:text-sm flex-1 sm:flex-none justify-center"
                     >
                       <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
-                      <span className="hidden xs:inline">
-                        {post.comments.length}
-                      </span>
-                      <span className="xs:hidden">{post.comments.length}</span>
+                      <span>{post.comments.length}</span>
                     </Button>
                     <Button
                       variant="ghost"

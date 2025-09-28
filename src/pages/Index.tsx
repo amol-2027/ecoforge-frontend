@@ -22,6 +22,7 @@ import {
   Star,
   Newspaper,
   Menu,
+  AlertTriangle,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -50,6 +51,8 @@ import CommunityWall from "@/components/CommunityWall";
 import CompeteSection from "@/components/CompeteSection";
 import CommunityDrives from "@/components/CommunityDrives";
 import EcoTimes from "@/components/EcoTimes";
+import EcoAlerts from "@/components/EcoAlerts";
+import { toast } from "@/components/ui/sonner";
 import { useGreenCoins } from "@/hooks/useGreenCoins";
 import { useAuth } from "@/contexts/AuthContext";
 import { Badge } from "@/components/ui/badge";
@@ -89,12 +92,34 @@ const Index = () => {
     return () => clearInterval(timer);
   }, [totalReferrals, displayReferrals]);
 
+  // Timed AQI notifications: first at 1 min, then every 5 mins
+  useEffect(() => {
+    const showAQINotification = () => {
+      toast("AQI Alert: Hazardous smog in Delhi & Punjab", {
+        description:
+          "Warning: Air quality is at dangerous levels. Limit outdoor activity and wear a mask.",
+        action: {
+          label: "View Alerts",
+          onClick: () => setActiveTab("alerts"),
+        },
+      });
+    };
+
+    const firstTimeout = window.setTimeout(showAQINotification, 60 * 1000);
+    const intervalId = window.setInterval(showAQINotification, 1 * 60 * 1000);
+
+    return () => {
+      window.clearTimeout(firstTimeout);
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
   const motivationalMessage = useMemo(() => {
     const n = totalReferrals;
     const options = [
-      `Together with you, ${n} people are now fighting climate change 🌱`,
-      `Every friend you invite makes Earth a little greener 🌍`,
-      `Your green squad is growing — you’re leading the change 💪`,
+      `Together with you, ${n} people are now fighting climate change `,
+      `Every friend you invite makes Earth a little greener `,
+      `Your green squad is growing  you’re leading the change `,
     ];
     return options[n % options.length];
   }, [totalReferrals]);
@@ -123,18 +148,55 @@ const Index = () => {
   };
 
   const tabConfig = [
-    { id: "dashboard", label: "Dashboard", icon: Target },
-    { id: "learn", label: "Learn", icon: BookOpen },
-    { id: "ecotimes", label: "EcoTimes", icon: Newspaper },
-    { id: "validation", label: "Share", icon: Camera },
-    { id: "community-drives", label: "Community Drives", icon: Users },
-    { id: "wallet", label: "Wallet & Store", icon: Coins },
-    { id: "compete", label: "Compete", icon: Trophy },
-    { id: "journal", label: "Journal", icon: Calendar },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: Target,
+      animation: "animate-ping",
+    },
+    { id: "learn", label: "Learn", icon: BookOpen, animation: "animate-float" },
+    {
+      id: "ecotimes",
+      label: "EcoTimes",
+      icon: Newspaper,
+      animation: "animate-wiggle",
+    },
+    {
+      id: "validation",
+      label: "Share",
+      icon: Camera,
+      animation: "animate-sparkle",
+    },
+    {
+      id: "community-drives",
+      label: "Community Drives",
+      icon: Users,
+      animation: "animate-pulse",
+    },
+    {
+      id: "wallet",
+      label: "Wallet & Store",
+      icon: Coins,
+      animation: "animate-coin-sparkle",
+    },
+    {
+      id: "compete",
+      label: "Compete",
+      icon: Trophy,
+      animation: "animate-pulse",
+    },
+    {
+      id: "journal",
+      label: "Journal",
+      icon: Calendar,
+      animation: "animate-breathe",
+    },
   ];
 
   const renderContent = () => {
     switch (activeTab) {
+      case "alerts":
+        return <EcoAlerts />;
       case "learn":
         return <LearningModules />;
       case "ecotimes":
@@ -152,34 +214,49 @@ const Index = () => {
       default:
         return (
           <div className="space-y-6">
-            {/* Hero Stats */}
+            {/* Enhanced Hero Stats for Student Appeal */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="card-eco text-center">
+              <Card className="card-fun text-center hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-center mb-2">
-                  <Star className="h-8 w-8 text-primary animate-bounce-gentle" />
+                  <Star className="h-8 w-8 text-fun-blue animate-sparkle" />
                 </div>
-                <h3 className="text-2xl font-bold text-gradient-eco">
+                <h3 className="text-2xl font-bold text-gradient-fun">
                   {ecoPoints}
                 </h3>
-                <p className="text-muted-foreground">Eco Points</p>
+                <p className="text-muted-foreground font-medium">
+                  Eco Points 🌟
+                </p>
+                <div className="mt-2 text-xs text-fun-blue animate-pulse">
+                  Keep going! +25 points today
+                </div>
               </Card>
 
-              <Card className="card-eco text-center">
+              <Card className="card-energy text-center hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-center mb-2">
-                  <Flame className="h-8 w-8 text-warning animate-glow" />
+                  <Flame className="h-8 w-8 text-fun-orange animate-wiggle" />
                 </div>
-                <h3 className="text-2xl font-bold text-gradient-water">
+                <h3 className="text-2xl font-bold text-gradient-energy">
                   {streak} days
                 </h3>
-                <p className="text-muted-foreground">Current Streak</p>
+                <p className="text-muted-foreground font-medium">
+                  Fire Streak 🔥
+                </p>
+                <div className="mt-2 text-xs text-fun-orange animate-pulse">
+                  Amazing! Keep the momentum
+                </div>
               </Card>
 
-              <Card className="card-eco text-center">
+              <Card className="card-magic text-center hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-center mb-2">
-                  <Trophy className="h-8 w-8 text-accent animate-float" />
+                  <Trophy className="h-8 w-8 text-fun-purple animate-float" />
                 </div>
-                <h3 className="text-2xl font-bold">#3</h3>
-                <p className="text-muted-foreground">Class Rank</p>
+                <h3 className="text-2xl font-bold text-gradient-magic">#3</h3>
+                <p className="text-muted-foreground font-medium">
+                  Class Rank 🏆
+                </p>
+                <div className="mt-2 text-xs text-fun-purple animate-pulse">
+                  Rising star! Almost #2
+                </div>
               </Card>
             </div>
 
@@ -189,14 +266,20 @@ const Index = () => {
             {/* Eco Activity Heatmap */}
             <EcoActivityHeatmap />
 
-            {/* Your Green Network Section */}
+            {/* Enhanced Green Network Section */}
             <Card
-              className={`card-eco bg-gradient-to-br ${
+              className={`card-fun bg-gradient-to-br ${
                 totalReferrals >= 10
-                  ? "from-emerald-50 to-emerald-100"
+                  ? "from-fun-purple/10 to-fun-pink/15"
                   : totalReferrals >= 5
-                  ? "from-green-50 to-green-100"
-                  : "from-primary/5 to-primary-glow/10"
+                  ? "from-fun-blue/10 to-fun-purple/15"
+                  : "from-primary-light/20 to-primary/10"
+              } border-2 ${
+                totalReferrals >= 10
+                  ? "border-fun-purple/30"
+                  : totalReferrals >= 5
+                  ? "border-fun-blue/30"
+                  : "border-primary/20"
               }`}
             >
               <div className="p-5 space-y-4">
@@ -238,11 +321,11 @@ const Index = () => {
                         <span>
                           Milestone:{" "}
                           {totalReferrals >= 10
-                            ? "🌍 Planet Protector"
+                            ? " Planet Protector"
                             : totalReferrals >= 5
-                            ? "🌳 Tree Grower"
+                            ? " Tree Grower"
                             : totalReferrals >= 1
-                            ? "🌱 Seed Planter"
+                            ? " Seed Planter"
                             : "—"}
                         </span>
                         <span>
@@ -270,7 +353,7 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="md:col-span-2 space-y-2">
-                    <div className="text-2xl font-bold text-gradient-eco">
+                    <div className="text-2xl font-bold text-gradient-rainbow animate-pulse">
                       {displayReferrals} New Eco-Warriors Joined Through You
                     </div>
                     <div className="text-sm text-muted-foreground">
@@ -312,7 +395,7 @@ const Index = () => {
                       <Button
                         className="btn-eco mt-2 flex items-center gap-2"
                         onClick={async () => {
-                          const shareText = `Join me on EcoQuest! Use my referral code ${referralCode} to sign up. I earn +20 GreenCoins and you get +10! 🌱🌍`;
+                          const shareText = `Join me on EcoQuest! Use my referral code ${referralCode} to sign up. I earn +20 GreenCoins and you get +10! 🌍`;
                           try {
                             if (navigator.share) {
                               await navigator.share({
@@ -338,7 +421,6 @@ const Index = () => {
                       <div className="mt-2 p-3 rounded-xl bg-primary/10 border border-primary/20">
                         <div className="text-sm font-semibold">
                           Congrats! You’ve built a Green Network of 10 members
-                          🌱
                         </div>
                         <div className="text-xs text-muted-foreground mb-2">
                           Share this achievement on WhatsApp/Instagram
@@ -377,35 +459,55 @@ const Index = () => {
             {/* Achievements */}
             <AchievementBadges />
 
-            {/* Quick Actions */}
-            <Card className="card-eco">
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Leaf className="h-5 w-5 text-primary" />
-                Today's Eco Actions
+            {/* Enhanced Quick Actions */}
+            <Card className="card-magic">
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gradient-magic">
+                <Leaf className="h-5 w-5 text-fun-purple animate-wiggle" />
+                Today's Eco Actions 🚀
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Button className="btn-eco justify-start h-auto py-4 px-6">
+                <Button className="btn-fun justify-start h-auto py-4 px-6 group">
                   <div className="text-left">
-                    <div className="font-semibold">Plant a Tree</div>
-                    <div className="text-xs opacity-80">+50 points</div>
+                    <div className="font-semibold">🌱 Plant a Tree</div>
+                    <div className="text-xs opacity-80">
+                      +50 points • Super eco!
+                    </div>
+                  </div>
+                  <div className="ml-auto text-xs opacity-60 group-hover:opacity-100 transition-opacity">
+                    🌟
                   </div>
                 </Button>
-                <Button className="btn-earth justify-start h-auto py-4 px-6">
+                <Button className="btn-energy justify-start h-auto py-4 px-6 group">
                   <div className="text-left">
-                    <div className="font-semibold">Recycle Waste</div>
-                    <div className="text-xs opacity-80">+30 points</div>
+                    <div className="font-semibold">♻️ Recycle Waste</div>
+                    <div className="text-xs opacity-80">
+                      +30 points • Easy win!
+                    </div>
+                  </div>
+                  <div className="ml-auto text-xs opacity-60 group-hover:opacity-100 transition-opacity">
+                    ⚡
                   </div>
                 </Button>
-                <Button className="btn-eco justify-start h-auto py-4 px-6">
+                <Button className="btn-magic justify-start h-auto py-4 px-6 group">
                   <div className="text-left">
-                    <div className="font-semibold">Water Conservation</div>
-                    <div className="text-xs opacity-80">+25 points</div>
+                    <div className="font-semibold">💧 Water Conservation</div>
+                    <div className="text-xs opacity-80">
+                      +25 points • Save drops!
+                    </div>
+                  </div>
+                  <div className="ml-auto text-xs opacity-60 group-hover:opacity-100 transition-opacity">
+                    ✨
                   </div>
                 </Button>
-                <Button className="btn-earth justify-start h-auto py-4 px-6">
+                <Button className="btn-eco justify-start h-auto py-4 px-6 group">
                   <div className="text-left">
-                    <div className="font-semibold">Energy Saving</div>
-                    <div className="text-xs opacity-80">+40 points</div>
+                    <div className="font-semibold">⚡ Energy Saving</div>
+                    <div className="text-xs opacity-80">
+                      +40 points • Power move!
+                    </div>
+                  </div>
+                  <div className="ml-auto text-xs opacity-60 group-hover:opacity-100 transition-opacity">
+                    🔥
                   </div>
                 </Button>
               </div>
@@ -418,20 +520,43 @@ const Index = () => {
   // Responsive: show sidebar on mobile, horizontal nav on desktop
   return (
     <div className="min-h-screen relative">
-      {/* Eco background gradients and shapes */}
+      {/* Ultra-colorful and attractive background with multiple effects */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-        {/* Main eco gradient */}
-        <div className="w-full h-full bg-gradient-to-br from-green-50 via-emerald-50 to-blue-50 absolute inset-0" />
-        {/* Decorative eco shapes */}
-        <div className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] rounded-full bg-gradient-to-br from-emerald-200 via-green-100 to-transparent opacity-60 blur-2xl animate-pulse-slow" />
-        <div className="absolute bottom-[-100px] right-[-100px] w-[350px] h-[350px] rounded-full bg-gradient-to-tr from-blue-200 via-cyan-100 to-transparent opacity-50 blur-2xl animate-pulse-slower" />
-        <div className="absolute top-[40%] left-[-80px] w-[200px] h-[200px] rounded-full bg-gradient-to-br from-yellow-100 via-green-50 to-transparent opacity-40 blur-2xl animate-pulse-slowest" />
-        {/* Extra wow layer: subtle radial + conic glow */}
-        <div className="absolute -top-16 right-[-60px] h-[420px] w-[420px] rounded-full opacity-40 blur-3xl bg-[conic-gradient(at_top_right,theme(colors.emerald.200)_0%,theme(colors.cyan.200)_30%,transparent_70%)]" />
-        <div className="absolute inset-0 opacity-[0.10] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.25),transparent_60%)]" />
+        {/* Main colorful eco gradient */}
+        <div className="w-full h-full bg-gradient-to-br from-fun-blue/12 via-primary-light/15 to-fun-purple/12 absolute inset-0" />
+        {/* Additional colorful overlay */}
+        <div className="w-full h-full bg-gradient-to-tr from-fun-pink/8 via-fun-orange/10 to-accent/8 absolute inset-0" />
+
+        {/* Large decorative eco shapes */}
+        <div className="absolute top-[-140px] left-[-140px] w-[450px] h-[450px] rounded-full bg-gradient-to-br from-fun-blue/25 via-primary/20 to-transparent opacity-65 blur-3xl animate-drift" />
+        <div className="absolute bottom-[-120px] right-[-120px] w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-fun-purple/25 via-accent/20 to-transparent opacity-55 blur-3xl animate-swirl" />
+        <div className="absolute top-[35%] left-[-90px] w-[250px] h-[250px] rounded-full bg-gradient-to-br from-fun-orange/20 via-warning/15 to-transparent opacity-45 blur-3xl animate-breathe" />
+        <div className="absolute bottom-[18%] left-[8%] w-[140px] h-[140px] rounded-full bg-gradient-to-br from-fun-pink/20 via-fun-purple/15 to-transparent opacity-35 blur-3xl animate-morph" />
+
+        {/* Medium floating elements */}
+        <div className="absolute top-[20%] right-[5%] w-[180px] h-[180px] rounded-full bg-gradient-to-br from-fun-blue/18 via-primary/15 to-transparent opacity-50 blur-2xl animate-ripple" />
+        <div className="absolute bottom-[50%] right-[12%] w-[130px] h-[130px] rounded-full bg-gradient-to-br from-fun-pink/20 via-accent/15 to-transparent opacity-55 blur-2xl animate-drift" />
+        <div className="absolute top-[70%] left-[25%] w-[100px] h-[100px] rounded-full bg-gradient-to-br from-fun-orange/18 via-warning/12 to-transparent opacity-50 blur-2xl animate-breathe" />
+
+        {/* Enhanced conic and radial glows */}
+        <div className="absolute -top-20 right-[-70px] h-[480px] w-[480px] rounded-full opacity-45 blur-3xl bg-[conic-gradient(at_top_right,theme(colors.fun-blue.300)_0%,theme(colors.fun-purple.300)_25%,theme(colors.accent.300)_50%,theme(colors.fun-orange.300)_75%,transparent_80%)]" />
+        <div className="absolute inset-0 opacity-[0.12] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.18),transparent_65%)]" />
+        <div className="absolute inset-0 opacity-[0.08] bg-[radial-gradient(ellipse_at_bottom_left,rgba(168,85,247,0.15),transparent_60%)]" />
+
+        {/* Small accent orbs */}
+        <div className="absolute top-[55%] left-[35%] w-[90px] h-[90px] rounded-full bg-gradient-to-br from-fun-pink/15 to-fun-purple/10 opacity-50 blur-xl animate-float" />
+        <div className="absolute bottom-[25%] right-[18%] w-[70px] h-[70px] rounded-full bg-gradient-to-br from-fun-orange/18 to-warning/12 opacity-55 blur-lg animate-sparkle" />
+        <div className="absolute top-[80%] right-[35%] w-[85px] h-[85px] rounded-full bg-gradient-to-br from-fun-blue/16 to-primary/12 opacity-50 blur-lg animate-pulse-slow" />
+
+        {/* Subtle wave patterns */}
+        <div className="absolute inset-0 opacity-25">
+          <div className="absolute top-[25%] left-[15%] w-[280px] h-[90px] bg-gradient-to-r from-transparent via-fun-blue/6 to-transparent rounded-full blur-2xl animate-float" />
+          <div className="absolute bottom-[25%] right-[25%] w-[230px] h-[70px] bg-gradient-to-r from-transparent via-fun-purple/7 to-transparent rounded-full blur-2xl animate-pulse-slower" />
+          <div className="absolute top-[55%] left-[55%] w-[180px] h-[50px] bg-gradient-to-r from-transparent via-fun-orange/6 to-transparent rounded-full blur-2xl animate-wiggle" />
+        </div>
       </div>
-      {/* Header */}
-      <header className="border-b border-border bg-gradient-to-r from-emerald-50/70 via-white/60 to-cyan-50/70 backdrop-blur-sm sticky top-0 z-50">
+      {/* Enhanced Header */}
+      <header className="border-b border-fun-blue/20 bg-white/40 bg-gradient-to-r from-fun-blue-10 via-white/60 to-fun-purple-10 backdrop-blur-lg sticky top-0 z-50 shadow-fun">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2 min-w-0">
             {/* Hamburger for mobile */}
@@ -442,46 +567,58 @@ const Index = () => {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-gradient-to-r from-primary to-primary-glow flex items-center justify-center flex-shrink-0">
-              <Leaf className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
-            </div>
-            <div className="truncate">
-              <h1 className="text-lg sm:text-xl font-bold text-gradient-eco leading-tight">
-                EcoQuest
-              </h1>
-              <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">
-                Play, Learn, Save the Planet
-              </p>
+            <div className="flex items-center">
+              <img
+                src="/ecoquest-logo.png"
+                alt="EcoQuest"
+                className="h-10 sm:h-12 md:h-14 w-auto object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
+              />
             </div>
           </div>
           {/* ...points, coins, profile button... */}
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex items-center gap-1 sm:gap-2">
-              <div className="badge-eco text-[10px] sm:text-xs px-2 py-1">
+              <div className="badge-fun text-[10px] sm:text-xs px-2 py-1 animate-pulse">
                 {ecoPoints} <span className="hidden xs:inline">Points</span>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowConvertDialog(true)}
-                className="h-6 w-6 p-0 hover:bg-primary/10 rounded-full"
+                className="h-6 w-6 p-0 hover:bg-primary/50 rounded-full"
                 title="Convert Points to GreenCoins"
               >
                 <ArrowRight className="h-3 w-3" />
               </Button>
             </div>
             <div
-              className="badge-water flex items-center gap-1 cursor-pointer hover:scale-105 transition-transform text-[10px] sm:text-xs px-2 py-1"
+              className="badge-energy flex items-center gap-1 cursor-pointer hover:scale-105 transition-transform text-[10px] sm:text-xs px-2 py-1 animate-wiggle"
               onClick={() => setActiveTab("wallet")}
             >
               <Coins className="h-3 w-3" />
-              {ecoCoins} <span className="hidden sm:inline">GreenCoins</span>
+              {ecoCoins} <span className="hidden sm:inline">GreenCoins</span> 💰
             </div>
             <Button
               variant="ghost"
               size="sm"
+              onClick={() => setActiveTab("alerts")}
+              className="flex items-center gap-1 hover:bg-red-50 rounded-full px-2 py-1 text-xs font-medium text-red-600 hover:text-red-700 border border-red-200 hover:border-red-300"
+              title="Eco-Alerts - 4 Active Alerts"
+            >
+              <AlertTriangle className="h-3 w-3" />
+              <span className="hidden sm:inline">Alerts</span>
+              <Badge
+                variant="destructive"
+                className="ml-1 h-4 w-4 p-0 text-xs flex items-center justify-center"
+              >
+                4
+              </Badge>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setShowProfile(true)}
-              className="flex items-center gap-2 hover:bg-muted/50 rounded-full p-2"
+              className="flex items-center gap-2 hover:bg-cyan-100 hover:text-cyan-700 rounded-full p-2 transition-colors duration-200"
             >
               <User className="h-4 w-4" />
               <span className="hidden sm:inline text-sm font-medium">
@@ -507,40 +644,39 @@ const Index = () => {
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Profile summary */}
-          <div className="p-6 border-b border-muted flex flex-col items-center gap-2 bg-gradient-to-br from-primary/10 to-emerald-50">
-            <Avatar className="h-16 w-16 mb-2 ring-4 ring-primary/20">
-              <AvatarImage src={user?.avatar} />
-              <AvatarFallback className="text-2xl font-bold">
+          {/* Enhanced Profile summary */}
+          <div className="p-6 border-b border-muted flex flex-col items-center gap-2 bg-gradient-to-br from-fun-blue/10 to-fun-purple/15">
+            <Avatar className="h-16 w-16 mb-2 ring-4 ring-fun-purple/30 animate-pulse">
+              <AvatarFallback className="text-2xl font-bold bg-gradient-to-r from-fun-blue to-fun-purple text-white">
                 {user?.name
                   ?.split(" ")
                   .map((n) => n[0])
                   .join("") || "U"}
               </AvatarFallback>
             </Avatar>
-            <div className="text-lg font-bold text-gradient-eco">
+            <div className="text-lg font-bold text-gradient-rainbow">
               {user?.name || "Student"}
             </div>
             <div className="text-xs text-muted-foreground mb-2">
               {user?.email || "student@ecolearn.com"}
             </div>
             <div className="flex gap-2 text-xs">
-              <span className="bg-primary/10 text-primary px-2 py-1 rounded-full">
-                {ecoPoints} pts
+              <span className="bg-fun-blue/20 text-fun-blue px-2 py-1 rounded-full font-semibold">
+                {ecoPoints} pts ⭐
               </span>
-              <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full flex items-center gap-1">
+              <span className="bg-fun-orange/20 text-fun-orange px-2 py-1 rounded-full flex items-center gap-1 font-semibold">
                 <Coins className="h-3 w-3" />
-                {ecoCoins}
+                {ecoCoins} 💰
               </span>
             </div>
             <button
-              className="mt-2 text-sm text-primary underline hover:opacity-80"
+              className="mt-2 text-sm text-fun-purple underline hover:opacity-80 font-semibold hover:text-fun-blue transition-colors"
               onClick={() => {
                 setShowProfile(true);
                 setSidebarOpen(false);
               }}
             >
-              View Profile
+              View Profile ✨
             </button>
           </div>
           {/* Nav links */}
@@ -548,48 +684,58 @@ const Index = () => {
             {tabConfig.map((tab) => (
               <button
                 key={tab.id}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-left text-base font-medium transition-colors ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-left text-base font-medium transition-all duration-300 ${
                   activeTab === tab.id
-                    ? "bg-primary/10 text-primary"
-                    : "hover:bg-muted/50"
+                    ? "bg-gradient-to-r from-fun-blue/15 to-fun-purple/15 text-fun-purple shadow-fun transform scale-105"
+                    : "hover:bg-gradient-to-r hover:from-fun-blue/10 hover:to-fun-purple/10 hover:text-fun-blue hover:shadow-sm hover:scale-105"
                 }`}
                 onClick={() => {
                   setActiveTab(tab.id);
                   setSidebarOpen(false);
                 }}
               >
-                <tab.icon className="h-5 w-5" />
+                <tab.icon
+                  className={`h-5 w-5 ${
+                    activeTab === tab.id ? tab.animation : ""
+                  }`}
+                />
                 {tab.label}
+                {activeTab === tab.id && <span className="ml-auto">✨</span>}
               </button>
             ))}
           </div>
         </nav>
       </div>
-      {/* Desktop Nav */}
+      {/* Enhanced Desktop Nav */}
       <div className="container mx-auto px-4 py-6 hidden md:block">
         <div className="w-full flex justify-center">
-          <div className="flex gap-2 mb-8 bg-card/50 p-2 rounded-2xl backdrop-blur-sm max-w-6xl w-full justify-center overflow-x-auto">
+          <div className="flex gap-2 mb-8 bg-gradient-to-r from-fun-blue/10 via-white/85 to-fun-purple/10 p-3 rounded-2xl backdrop-blur-md max-w-6xl w-full justify-center overflow-x-auto shadow-fun border border-fun-blue/20 bg-colorful-pattern">
             {tabConfig.map((tab) => (
               <Button
                 key={tab.id}
                 variant={activeTab === tab.id ? "default" : "ghost"}
-                className={`flex items-center gap-2 rounded-xl transition-all duration-200 whitespace-nowrap ${
+                className={`flex items-center gap-2 rounded-xl transition-all duration-300 whitespace-nowrap ${
                   activeTab === tab.id
-                    ? "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-eco"
-                    : "hover:bg-primary/10 hover:text-primary hover:shadow-sm"
+                    ? "bg-gradient-to-r from-fun-blue to-fun-purple text-white shadow-magic hover:shadow-fun transform scale-105"
+                    : "hover:bg-gradient-to-r hover:from-fun-blue/10 hover:to-fun-purple/10 hover:text-fun-purple hover:shadow-fun hover:scale-105"
                 }`}
                 onClick={() => setActiveTab(tab.id)}
               >
-                <tab.icon className="h-4 w-4" />
+                <tab.icon
+                  className={`h-4 w-4 ${
+                    activeTab === tab.id ? tab.animation : ""
+                  }`}
+                />
                 {tab.label}
+                {activeTab === tab.id && <span className="ml-1">✨</span>}
               </Button>
             ))}
           </div>
         </div>
       </div>
-      {/* Content */}
+      {/* Enhanced Content */}
       <div className="container mx-auto px-4 py-6">
-        <div className="rounded-2xl border border-white/50 bg-white/60 backdrop-blur-md shadow-[0_10px_35px_-10px_rgba(0,0,0,0.25)] p-3 sm:p-5">
+        <div className="rounded-2xl border border-fun-blue/20 bg-gradient-to-br from-white/85 via-fun-blue/5 to-fun-purple/5 backdrop-blur-lg shadow-fun p-3 sm:p-5 hover:shadow-magic transition-all duration-300 bg-rainbow-shift">
           {renderContent()}
         </div>
       </div>
@@ -597,7 +743,7 @@ const Index = () => {
       <Dialog open={showProfile} onOpenChange={setShowProfile}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-gradient-eco">
+            <DialogTitle className="text-2xl font-bold text-gradient-rainbow">
               Student Profile
             </DialogTitle>
           </DialogHeader>
@@ -608,8 +754,8 @@ const Index = () => {
       <Dialog open={showConvertDialog} onOpenChange={setShowConvertDialog}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-gradient-eco">
-              Convert Points to GreenCoins
+            <DialogTitle className="text-xl font-bold text-gradient-fun">
+              Convert Points to GreenCoins 💰
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">

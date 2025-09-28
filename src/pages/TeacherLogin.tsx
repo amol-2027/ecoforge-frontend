@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
-const Login = () => {
+const TeacherLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -20,7 +20,7 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       toast({
         title: "Error",
@@ -32,17 +32,19 @@ const Login = () => {
 
     setIsLoading(true);
     const success = await login(email, password);
-    
+
     if (success) {
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
-      });
       try {
         const saved = JSON.parse(localStorage.getItem("ecolearn_user") || "null");
         if (saved && (saved.role === "teacher" || saved.role === "admin")) {
+          toast({ title: "Welcome, Teacher!", description: "You have successfully logged in." });
           navigate("/teacher");
         } else {
+          toast({
+            title: "Student account detected",
+            description: "This portal is for teachers. Redirecting to student dashboard.",
+            variant: "default",
+          });
           navigate("/");
         }
       } catch {
@@ -62,23 +64,19 @@ const Login = () => {
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-emerald-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo and Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="flex justify-center mb-3 sm:mb-4">
-            <img 
-              src="/ecoquest-logo2.png" 
-              alt="EcoQuest Logo" 
-              className="h-20 w-auto max-w-[180px] sm:h-24 sm:max-w-[220px] md:h-28 md:max-w-[260px] object-contain"
-            />
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-primary to-primary-glow mb-4">
+            <Leaf className="h-8 w-8 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold text-gradient-eco mb-2">Welcome Back</h1>
-          <p className="text-muted-foreground">Sign in to continue your eco journey</p>
+          <h1 className="text-3xl font-bold text-gradient-eco mb-2">Teacher Portal</h1>
+          <p className="text-muted-foreground">Sign in to manage your classes and students</p>
         </div>
 
         <Card className="card-eco shadow-xl">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Teacher Sign In</CardTitle>
             <CardDescription className="text-center">
-              Enter your credentials to access your account
+              Enter your teacher credentials to access your dashboard
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -145,21 +143,12 @@ const Login = () => {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
-                Don't have an account?{" "}
+                Are you a student?{" "}
                 <Link
-                  to="/register"
+                  to="/login"
                   className="font-medium text-primary hover:text-primary/80 transition-colors"
                 >
-                  Sign up here
-                </Link>
-              </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Are you a teacher?{" "}
-                <Link
-                  to="/teacher/login"
-                  className="font-medium text-primary hover:text-primary/80 transition-colors"
-                >
-                  Go to Teacher Login
+                  Go to Student Login
                 </Link>
               </p>
             </div>
@@ -170,11 +159,17 @@ const Login = () => {
         <Card className="mt-4 bg-muted/30">
           <CardContent className="pt-4">
             <p className="text-xs text-muted-foreground text-center mb-2">
-              Demo Credentials (for testing):
+              Demo Teacher Credentials (for testing):
             </p>
             <div className="text-xs text-center space-y-1">
-              <p><strong>Email:</strong> demo@ecolearn.com</p>
-              <p><strong>Password:</strong> demo123</p>
+              <div className="space-y-1">
+                <p><strong>Email:</strong> teacher@ecolearn.com</p>
+                <p><strong>Password:</strong> teacher123</p>
+              </div>
+              <div className="space-y-1 pt-2">
+                <p><strong>Email:</strong> mentor@ecolearn.com</p>
+                <p><strong>Password:</strong> mentor123</p>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -183,4 +178,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default TeacherLogin;

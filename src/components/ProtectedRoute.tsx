@@ -3,9 +3,11 @@ import { Navigate } from "react-router-dom";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  allowedRoles?: string[];
+  redirectTo?: string;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles, redirectTo }) => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -20,7 +22,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={redirectTo || "/login"} replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    const fallback = redirectTo || (user.role === 'teacher' || user.role === 'admin' ? '/teacher' : '/');
+    return <Navigate to={fallback} replace />;
   }
 
   return <>{children}</>;

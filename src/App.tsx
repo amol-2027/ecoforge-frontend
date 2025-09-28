@@ -11,6 +11,8 @@ import EcoBot from "./components/EcoBot";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { GreenCoinsProvider } from "./hooks/useGreenCoins";
 import { AuthProvider } from "./contexts/AuthContext";
+import TeacherLogin from "./pages/TeacherLogin";
+import TeacherDashboard from "./pages/TeacherDashboard";
 
 const queryClient = new QueryClient();
 
@@ -19,13 +21,35 @@ const App = () => (
     <AuthProvider>
       <GreenCoinsProvider>
         <TooltipProvider>
-          {/* Eco background gradients and shapes for the whole app */}
+          {/* Ultra-colorful and attractive background with multiple effects */}
           <div className="fixed inset-0 -z-50 overflow-hidden pointer-events-none">
-            <div className="w-full h-full bg-gradient-to-br from-green-100 via-blue-50 to-emerald-100 absolute inset-0" />
-            <div className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] rounded-full bg-gradient-to-br from-emerald-200 via-green-100 to-transparent opacity-60 blur-2xl animate-pulse-slow" />
-            <div className="absolute bottom-[-100px] right-[-100px] w-[350px] h-[350px] rounded-full bg-gradient-to-tr from-blue-200 via-cyan-100 to-transparent opacity-50 blur-2xl animate-pulse-slower" />
-            <div className="absolute top-[40%] left-[-80px] w-[200px] h-[200px] rounded-full bg-gradient-to-br from-yellow-100 via-green-50 to-transparent opacity-40 blur-2xl animate-pulse-slowest" />
-            <div className="absolute bottom-[20%] left-[10%] w-[120px] h-[120px] rounded-full bg-gradient-to-br from-pink-200 via-fuchsia-100 to-transparent opacity-30 blur-2xl animate-pulse-slowest" />
+            {/* Main colorful atmospheric base */}
+            <div className="w-full h-full bg-gradient-to-br from-fun-blue/12 via-primary-light/15 to-fun-purple/12 absolute inset-0" />
+            {/* Additional colorful overlay */}
+            <div className="w-full h-full bg-gradient-to-tr from-fun-pink/8 via-fun-orange/10 to-accent/8 absolute inset-0" />
+
+            {/* Large floating orbs */}
+            <div className="absolute top-[-150px] left-[-150px] w-[500px] h-[500px] rounded-full bg-gradient-to-br from-fun-blue/25 via-primary/20 to-transparent opacity-70 blur-3xl animate-drift" />
+            <div className="absolute bottom-[-120px] right-[-120px] w-[450px] h-[450px] rounded-full bg-gradient-to-tr from-fun-purple/25 via-accent/20 to-transparent opacity-60 blur-3xl animate-swirl" />
+            <div className="absolute top-[30%] left-[-100px] w-[300px] h-[300px] rounded-full bg-gradient-to-br from-fun-orange/20 via-warning/15 to-transparent opacity-50 blur-3xl animate-breathe" />
+            <div className="absolute bottom-[15%] left-[5%] w-[180px] h-[180px] rounded-full bg-gradient-to-br from-fun-pink/20 via-fun-purple/15 to-transparent opacity-40 blur-3xl animate-morph" />
+
+            {/* Medium floating elements */}
+            <div className="absolute top-[15%] right-[2%] w-[200px] h-[200px] rounded-full bg-gradient-to-br from-fun-blue/15 via-primary/12 to-transparent opacity-45 blur-2xl animate-ripple" />
+            <div className="absolute bottom-[55%] right-[15%] w-[150px] h-[150px] rounded-full bg-gradient-to-br from-fun-pink/18 via-accent/12 to-transparent opacity-50 blur-2xl animate-drift" />
+            <div className="absolute top-[65%] left-[20%] w-[120px] h-[120px] rounded-full bg-gradient-to-br from-fun-orange/16 via-warning/10 to-transparent opacity-45 blur-2xl animate-breathe" />
+
+            {/* Small accent orbs */}
+            <div className="absolute top-[45%] right-[25%] w-[80px] h-[80px] rounded-full bg-gradient-to-br from-fun-purple/20 via-fun-blue/15 to-transparent opacity-60 blur-xl animate-sparkle" />
+            <div className="absolute bottom-[35%] left-[40%] w-[100px] h-[100px] rounded-full bg-gradient-to-br from-fun-pink/18 via-fun-orange/12 to-transparent opacity-55 blur-xl animate-float" />
+            <div className="absolute top-[75%] right-[45%] w-[90px] h-[90px] rounded-full bg-gradient-to-br from-accent/20 via-primary/15 to-transparent opacity-50 blur-xl animate-pulse-slow" />
+
+            {/* Subtle wave patterns */}
+            <div className="absolute inset-0 opacity-30">
+              <div className="absolute top-[20%] left-[10%] w-[300px] h-[100px] bg-gradient-to-r from-transparent via-fun-blue/5 to-transparent rounded-full blur-2xl animate-float" />
+              <div className="absolute bottom-[30%] right-[20%] w-[250px] h-[80px] bg-gradient-to-r from-transparent via-fun-purple/6 to-transparent rounded-full blur-2xl animate-pulse-slower" />
+              <div className="absolute top-[60%] left-[60%] w-[200px] h-[60px] bg-gradient-to-r from-transparent via-fun-orange/5 to-transparent rounded-full blur-2xl animate-wiggle" />
+            </div>
           </div>
           <Toaster />
           <Sonner />
@@ -35,10 +59,19 @@ const App = () => (
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/teacher/login" element={<TeacherLogin />} />
+              <Route
+                path="/teacher"
+                element={
+                  <ProtectedRoute allowedRoles={["teacher", "admin"]} redirectTo="/teacher/login">
+                    <TeacherDashboard />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute allowedRoles={["student"]}>
                     <Index />
                     <EcoBot />
                   </ProtectedRoute>
